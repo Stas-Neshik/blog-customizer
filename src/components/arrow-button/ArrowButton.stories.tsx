@@ -11,9 +11,13 @@ type Story = StoryObj<typeof ArrowButton>;
 
 export const ArrowButtonStory: Story = {
 	render: () => {
+		function handleClick(): void {
+			throw new Error('Function not implemented.');
+		}
+
 		return (
 			<>
-				<ArrowButton />
+				<ArrowButton isOpen={false} onClick={()=> console.log('click')} />
 			</>
 		);
 	},

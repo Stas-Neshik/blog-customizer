@@ -10,10 +10,19 @@
 	cursor: pointer;
 }
 
-.button:active {
-	background: var(--gold, #ffc802);
+.colorSubmit {
+	background: #ffc802;
+	text-decoration: dashed;
 }
 
-.button:hover {
-	background: var(--gold, #ffc802);
+.colorSubmit:hover {
+	background: #ffedab;
+}
+
+.colorReset {
+	background: #ffff;
+}
+
+.colorReset:hover {
+	background: grey;
 }
