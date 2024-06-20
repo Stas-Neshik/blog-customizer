@@ -28,18 +28,18 @@ export const ArticleParamsForm = ({
 	currentState,
 	setcurrentState,
 }: ArticleParamsForm) => {
-	const [isOpen, setIsOpen] = useState<boolean>(false);
+	const [isMenuOpen, seIsMenuOpen] = useState<boolean>(false);
 	const rootRef = useRef<HTMLElement>(null);
 
 	const arrowOpenHandler = (): void => {
-		setIsOpen(!isOpen);
+		seIsMenuOpen(!isMenuOpen);
 	};
 
 	useOutsideClickClose({
-		isOpen: isOpen,
+		isOpen: isMenuOpen,
 		rootRef,
 		onClose: arrowOpenHandler,
-		onChange: setIsOpen,
+		onChange: seIsMenuOpen,
 	});
 
 	const [currentBackgroundColors, setBackgroundColors] = useState(
@@ -56,7 +56,7 @@ export const ArticleParamsForm = ({
 		currentState.fontSizeOption
 	);
 
-	const formSubmitHandler = (e: SyntheticEvent) => {
+	const handlerSubmitForm = (e: SyntheticEvent) => {
 		e.preventDefault();
 		setcurrentState({
 			backgroundColor: currentBackgroundColors,
@@ -67,7 +67,7 @@ export const ArticleParamsForm = ({
 		});
 	};
 
-	const formResetHandler = () => {
+	const handlerResetForm = () => {
 		setcurrentState({
 			backgroundColor: defaultArticleState,
 			contentWidth: defaultArticleState,
@@ -84,12 +84,12 @@ export const ArticleParamsForm = ({
 
 	return (
 		<>
-			<ArrowButton onClick={arrowOpenHandler} isOpen={isOpen} />
+			<ArrowButton onClick={arrowOpenHandler} isOpen={isMenuOpen} />
 
 			<aside
 				ref={rootRef}
-				className={clsx(styles.container, { [styles.container_open]: isOpen })}>
-				<form className={styles.form} onSubmit={formSubmitHandler}>
+				className={clsx(styles.container, { [styles.container_open]: isMenuOpen })}>
+				<form className={styles.form} onSubmit={handlerSubmitForm}>
 					<Text as='h2' size={31} weight={800} uppercase dynamicLite>
 						Задайте параметры
 					</Text>
@@ -133,7 +133,7 @@ export const ArticleParamsForm = ({
 					/>
 
 					<div className={styles.bottomContainer}>
-						<Button title='Сбросить' type='reset' onClick={formResetHandler} />
+						<Button title='Сбросить' type='reset' onClick={handlerResetForm} />
 						<Button title='Применить' type='submit' />
 					</div>
 				</form>
