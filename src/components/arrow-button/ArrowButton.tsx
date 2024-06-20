@@ -7,20 +7,23 @@ import clsx from 'clsx';
 
 export type ArrowButtonProps = {
 	onClick?: () => void;
-	isOpen: boolean
+	isOpen: boolean;
 };
 
-export const ArrowButton = ({onClick, isOpen}: ArrowButtonProps): ReactElement => {
-
-const clickHandler = () => {
-	onClick?.();
-}
+export const ArrowButton = ({
+	onClick,
+	isOpen,
+}: ArrowButtonProps): ReactElement => {
+	const clickHandler = () => {
+		onClick?.();
+	};
 
 	return (
 		/* Не забываем указаывать role и aria-label атрибуты для интерактивных элементов */
 		<div
 			onClick={(e: SyntheticEvent) => {
 				e.stopPropagation();
+
 				clickHandler();
 			}}
 			role='button'

@@ -6,27 +6,32 @@ import { RadioGroup } from '../radio-group/index';
 import { Text } from '../text';
 
 import styles from './ArticleParamsForm.module.scss';
-import { ChangeEvent, useRef, useState } from 'react';
+import { SyntheticEvent, useRef, useState } from 'react';
 import clsx from 'clsx';
 import {
 	ArticleStateType,
 	backgroundColors,
 	contentWidthArr,
+	defaultArticleState,
 	fontColors,
 	fontFamilyOptions,
 	fontSizeOptions,
 } from 'src/constants/articleProps';
 import { useOutsideClickClose } from '../select/hooks/useOutsideClickClose';
 
+export type ArticleParamsForm = {
+	currentState: ArticleStateType;
+	setcurrentState: (param: any) => void;
+};
 
-
-
-export const ArticleParamsForm = () => {
-	const [isOpen, setIsOpen] = useState<boolean>(true);
+export const ArticleParamsForm = ({
+	currentState,
+	setcurrentState,
+}: ArticleParamsForm) => {
+	const [isOpen, setIsOpen] = useState<boolean>(false);
 	const rootRef = useRef<HTMLElement>(null);
 
-	const arrowOpenHandler = () => {
-		console.log('Кнопка нажата!');
+	const arrowOpenHandler = (): void => {
 		setIsOpen(!isOpen);
 	};
 
@@ -34,65 +39,101 @@ export const ArticleParamsForm = () => {
 		isOpen: isOpen,
 		rootRef,
 		onClose: arrowOpenHandler,
-		onChange: setIsOpen
-	})
+		onChange: setIsOpen,
+	});
 
+	const [currentBackgroundColors, setBackgroundColors] = useState(
+		currentState.backgroundColor
+	);
+	const [currentContentWidthArr, setContentWidthArr] = useState(
+		currentState.contentWidth
+	);
+	const [currentFontColors, setFontColors] = useState(currentState.fontColor);
+	const [currentFontFamilyOptions, setFontFamilyOptions] = useState(
+		currentState.fontFamilyOption
+	);
+	const [currentFontSizeOptions, setFontSizeOptions] = useState(
+		currentState.fontSizeOption
+	);
 
-
-
-	const reset = () => {
-		console.log('Нажал Reset');
+	const formSubmitHandler = (e: SyntheticEvent) => {
+		e.preventDefault();
+		setcurrentState({
+			backgroundColor: currentBackgroundColors,
+			contentWidth: currentContentWidthArr,
+			fontColor: currentFontColors,
+			fontFamilyOption: currentFontFamilyOptions,
+			fontSizeOption: currentFontSizeOptions,
+		});
 	};
+
+	const formResetHandler = () => {
+		setcurrentState({
+			backgroundColor: defaultArticleState,
+			contentWidth: defaultArticleState,
+			fontColor: defaultArticleState,
+			fontFamilyOption: defaultArticleState,
+			fontSizeOption: defaultArticleState,
+		});
+		setBackgroundColors(defaultArticleState.backgroundColor);
+		setContentWidthArr(defaultArticleState.contentWidth);
+		setFontColors(defaultArticleState.fontColor);
+		setFontFamilyOptions(defaultArticleState.fontFamilyOption);
+		setFontSizeOptions(defaultArticleState.fontFamilyOption);
+	};
+
 	return (
 		<>
-			<ArrowButton onClick={arrowOpenHandler} isOpen={isOpen}/>
+			<ArrowButton onClick={arrowOpenHandler} isOpen={isOpen} />
 
-			<aside ref={rootRef}
+			<aside
+				ref={rootRef}
 				className={clsx(styles.container, { [styles.container_open]: isOpen })}>
-				<form className={styles.form} onSubmit={reset}>
+				<form className={styles.form} onSubmit={formSubmitHandler}>
 					<Text as='h2' size={31} weight={800} uppercase dynamicLite>
 						Задайте параметры
 					</Text>
+
 					<Select
-						placeholder={'Open Sans'}
-						selected={fontFamilyOptions[0]}
+						selected={currentFontFamilyOptions}
 						options={fontFamilyOptions}
 						title={'шрифт'}
-						
+						onChange={setFontFamilyOptions}
 					/>
 
 					<RadioGroup
-						name='31'
-						selected={fontSizeOptions[0]}
+						name='132'
+						selected={currentFontSizeOptions}
 						options={fontSizeOptions}
 						title='размер шрифта'
+						onChange={setFontSizeOptions}
 					/>
 
 					<Select
-						placeholder={'Чёрный'}
-						selected={fontColors[3]}
+						selected={currentFontColors}
 						options={fontColors}
 						title={'цвет шрифта'}
+						onChange={setFontColors}
 					/>
 
 					<Separator />
 
 					<Select
-						placeholder={'Чёрный'}
-						selected={backgroundColors[2]}
+						selected={currentBackgroundColors}
 						options={backgroundColors}
 						title={'цвет фона'}
+						onChange={setBackgroundColors}
 					/>
 
 					<Select
-						placeholder={contentWidthArr[0].title}
-						selected={contentWidthArr[2]}
+						selected={currentContentWidthArr}
 						options={contentWidthArr}
 						title={'ширина контента'}
+						onChange={setContentWidthArr}
 					/>
 
 					<div className={styles.bottomContainer}>
-						<Button title='Сбросить' type='reset' onClick={reset} />
+						<Button title='Сбросить' type='reset' onClick={formResetHandler} />
 						<Button title='Применить' type='submit' />
 					</div>
 				</form>
